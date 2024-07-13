@@ -88,6 +88,7 @@ KEYS_PER_MODEL: Final = {
 # Base URL for La Marzocco Cloud
 TOKEN_URL: Final = "https://cms.lamarzocco.io/oauth/v2/token"
 CUSTOMER_URL: Final = "https://cms.lamarzocco.io/api/customer"
+PROFESSIONAL_URL: Final = "https://cms.lamarzocco.io/api/professional"
 GW_BASE_URL: Final = "https://gw-lmz.lamarzocco.io/v1/home"
 GW_BASE_URL_PRO: Final = "https://gw-lmz.lamarzocco.io/v1/professional"
 GW_MACHINE_BASE_URL: Final = f"{GW_BASE_URL}/machines"
