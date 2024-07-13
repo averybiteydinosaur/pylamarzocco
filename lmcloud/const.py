@@ -89,8 +89,11 @@ KEYS_PER_MODEL: Final = {
 TOKEN_URL: Final = "https://cms.lamarzocco.io/oauth/v2/token"
 CUSTOMER_URL: Final = "https://cms.lamarzocco.io/api/customer"
 GW_BASE_URL: Final = "https://gw-lmz.lamarzocco.io/v1/home"
+GW_BASE_URL_PRO: Final = "https://gw-lmz.lamarzocco.io/v1/professional"
 GW_MACHINE_BASE_URL: Final = f"{GW_BASE_URL}/machines"
+GW_MACHINE_BASE_URL_PRO: Final = f"{GW_BASE_URL_PRO}/machines"
 GW_AWS_PROXY_BASE_URL: Final = f"{GW_BASE_URL}/aws-proxy"
+GW_AWS_PROXY_BASE_URL_PRO: Final = f"{GW_MACHINE_BASE_URL_PRO}/aws-proxy"
 
 DEFAULT_CLIENT_ID: Final = "7_1xwei9rtkuckso44ks4o8s0c0oc4swowo00wgw0ogsok84kosg"
 DEFAULT_CLIENT_SECRET: Final = "2mgjqpikbfuok8g4s44oo4gsw0ks44okk4kc4kkkko0c8soc8s"
