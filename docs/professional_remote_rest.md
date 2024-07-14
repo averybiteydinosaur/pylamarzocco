@@ -1,5 +1,7 @@
 # Cloud REST API
 
+http requests following auth are sent with Connection keep-alive
+
 ## Auth
 
 `GET https://cms.lamarzocco.io/oauth/v2/token`
@@ -153,7 +155,7 @@ tbc
 }
 ```
 
-### Latest measurement on fleet machine?
+### Latest measurement on fleet machine? The app doesn't appear to use this.
 
 `GET https://cms.lamarzocco.io/api/professional/fleet/get/latest-measurement`
 
@@ -165,9 +167,14 @@ tbc
 }
 ```
 
-### Fleet machine metrics
+### Fleet machine metrics - the app calls this every 30 seconds when in the foreground
 
 `GET https://cms.lamarzocco.io/v1/professional/machines/awsproxy/{{serial_number}}/things/{{relayr_id}}/metrics`
+
+expr:       COUNT
+aggr_mode:  DAILY
+from:       2024-07-13T23:00:00.000Z
+to:         2024-07-14T23:00:00.000Z
 
 ```json
 {
@@ -799,7 +806,7 @@ tbc
     }
 }
 ```
-### Fleet machine metrics between dates
+### Fleet machine metrics between dates - The app uses this with a filter to update the group information periodically when active in that section (if no local websocket connection).
 
 `GET https://cms.lamarzocco.io/v1/professional/machines/awsproxy/{{serial_number}}/things/{{relayr_id}}/aggregate-metrics?expr=COUNT&aggr_mode=DAILY&from=2024-07-11T21:19:20.567Z&to=2024-07-12T21:19:20.567Z`
 
@@ -807,11 +814,45 @@ expr: COUNT
 aggr_mode: DAILY
 from: YYYY-MM-DDThh:mm:sssZ
 to: YYYY-MM-DDThh:mm:sssZ
+filterOn:   FlushStoppedGroup1Time,FlushStoppedGroup2Time,BrewingStoppedGroup1Time,BrewingStoppedGroup2Time \\ etc.
+
+// This is pretty slow to retrieve all metrics, and often seems to timeout if no filter is applied
 
 ```json
-to come, sometimes seems to time out 524 cloudflare
+{
+    "data": {
+        "FlushStoppedGroup2Time": [
+            {
+                "value": "2",
+                "type": "double",
+                "time": 1720569600000
+            }
+        ],
+        "BrewingStoppedGroup1Time": [
+            {
+                "value": "1",
+                "type": "double",
+                "time": 1720569600000
+            }
+        ],
+        "FlushStoppedGroup1Time": [
+            {
+                "value": "1",
+                "type": "double",
+                "time": 1720569600000
+            }
+        ],
+        "BrewingStoppedGroup2Time": [
+            {
+                "value": "4",
+                "type": "double",
+                "time": 1720569600000
+            }
+        ]
+    },
+    "status": true
+}
 ```
-
 
 
 ## Machine models
@@ -1095,7 +1136,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "379c6abe-71c7-4c9b-96ba-13378a3654e3",
                 "name": "La Marzocco Home App v3.1.0 is out!",
-                "description": "<p>La Marzocco Home app v3.1.0 has been released!</p>\r\n\r\n<p>This version allows you to update your machine's gateway to 3.4-rc5. Follow the notification in the information section of the app to update your machine.</p>\r\n\r\n<p>These new updates bring some exciting features to La Marzocco Home App, such as a new Auto Standby Logic, the Power Options, and Automatic Daylight Saving Time Management.</p>\r\n\r\n<p>The new Auto Standby Logic will allow you to instruct your machine to go into standby after a specific time following the end of a brew or from when the machine was turned on. The specific amount of time is customizable, and is an optional feature allowing for energy savings.</p> \r\n\r\n<p>The Power Options replace the Weekly Schedule.</p>\r\n<p>You can now set up to 25 different on/off slots for your machine, also allowing you to decide whether your steam boiler also needs to turn on. During a programmed power-on slot, the auto standby logic will not be enabled to ensure your machine is ready to brew according to your schedule.</p>\r\n\r\n<p>The latest gateway firmware update also includes Automatic Daylight Saving Time Management. This allows your machine to automatically be in sync with your timezone and ready for daylight saving time changes. Once your machine is updated, connect to it \"locally\" (green line at the top of the screen with the Wi-Fi symbol on the right) to enable it.</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2023-07-24T12:44:04+00:00",
                 "updatedAt": "2024-03-29T08:56:50+00:00",
                 "subtitle": null,
@@ -1106,7 +1147,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "3e480bfd-67e0-4b61-b15e-24d971f38d16",
                 "name": "Linea Micra_How to use the La Marzocco Home app",
-                "description": "<p>Connect your smartphone with your Linea Micra and learn about all of the built-in features including pre-infusion, pre-brewing, boiler control</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2023-01-12T15:20:26+00:00",
                 "updatedAt": "2023-02-20T10:08:32+00:00",
                 "subtitle": null,
@@ -1128,7 +1169,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "b686d8b6-4f25-4c25-85f9-9d7b51ae6dcc",
                 "name": "Linea Micra_ How to replace shower screen and gasket",
-                "description": "<p>Preventive maintenance is important to keep your machine in good condition and running. Learn how to replace the shower screen and gasket in this easy step-by-step guide.</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2023-01-12T15:12:57+00:00",
                 "updatedAt": "2023-02-20T10:09:26+00:00",
                 "subtitle": null,
@@ -1139,7 +1180,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "07ebe0a6-846f-4d15-9ff0-fc757e2acaa6",
                 "name": "How to connect your Linea Micra",
-                "description": "<p>Take advantage of quick control access of your Linea Micra via the La Marzocco Home app.</p>\r\n\r\n<p>Adjust temperature, control settings, use auto-backflush, and power your machine on and off with a custom schedule.</p>\r\n\r\n<p>Learn how to connect your Linea Micra by following this easy step by step guide.</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2023-01-12T15:09:17+00:00",
                 "updatedAt": "2023-02-20T10:10:03+00:00",
                 "subtitle": null,
@@ -1161,7 +1202,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "901e5cca-2146-45d1-9515-243fc3afcbe1",
                 "name": "Linea Micra, convertible portafilter",
-                "description": "<p>Linea Micra&#39;s three-in-one convertible portafilter is easy to clean with a design that allows you to quickly change between a single-spout, double-spout, and bottomless portafilter.</p>\r\n\r\n<p>The removable spout attachments are made of Radel&mdash;a special hi-tech polymer&mdash;that is resistant to heat, acid, aging, abrasion, and staining​.</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2023-01-12T14:47:45+00:00",
                 "updatedAt": "2023-02-20T10:12:24+00:00",
                 "subtitle": null,
@@ -1172,7 +1213,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "402a537d-5d3b-4315-8fea-ea6a28207ff8",
                 "name": "Hello Linea Micra",
-                "description": "<p>With this shoutout and new product - taking inspiration from an industry icon, true to the spirit and heritage of La Marzocco -&nbsp;we are thrilled to announce the release&nbsp;of Linea Micra: yet another step in&nbsp;furthering coffee knowledge, professionalism, and cup quality with all aficionados around the globe!</p>\r\n\r\n<p>Our team of engineers have worked hard and passionately to design an espresso machine that would be worthy of caf&eacute; status and culture.</p>\r\n\r\n<p>With its sleek contour and charming, simple-to-use form, Linea Micra raises the bar in the kitchen and in the everyday coffee ritual.&nbsp;</p>\r\n\r\n<p>A scaled-down reflection of La Marzocco&#39;s legendary Linea Classic... the younger and more compact version, the Linea Micra, embodies style, performance, Florentine craft, and world class innovation.</p>\r\n\r\n<p>Join us as we present product news, brand highlights, lifestyle content and community gatherings such as the &quot;Open House&quot; events - respectively online across our blog, newsletter, Instagram handle, and via &quot;Live&quot; onsite format in beautiful showrooms and&nbsp;major cities&nbsp;from New York to London, Paris to Auckland, or Florence to Singapore just to name a few ...&nbsp;</p>\r\n\r\n<p>The La Marzocco team invites you to learn more about the latest Home machine, combining a dynamic feature set and small body that allows you to explore all things espresso.&nbsp;</p>\r\n\r\n<p><br />\r\nBring the cafe home!&nbsp;Linea Micra is here.</p>\r\n\r\n<p><br />\r\nVisit our dedicated <a href=\"https://international.lamarzoccohome.com/en/linea-micra\">web page</a> to learn more about the product features.</p>\r\n\r\n<p>&nbsp;</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2022-11-08T15:38:05+00:00",
                 "updatedAt": "2023-02-20T10:13:58+00:00",
                 "subtitle": "Bring the cafe home",
@@ -1183,18 +1224,18 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "7728d8cb-89f1-4b1b-baf7-527a2bbadfdc",
                 "name": "La Marzocco Home App V. 2 is Now Live",
-                "description": "<p>Introducing Pre-Infusion on the Linea Mini, Auto-Backflush, Boiler Control, and more.</p>\r\n\r\n<p>We&rsquo;re excited to announce that La Marzocco Home App 2.0 is now live. This version introduces Pre-Infusion on plumbed-in Linea Minis, Auto-Backflush on all connected machines, Boiler Control, and more. Update the app to take control of your machine, and get all the latest features on your connected La Marzocco home espresso machine.</p>\r\n\r\n<p style=\"margin-left:360px\"><strong>Overview of Features</strong></p>\r\n\r\n<p>&nbsp;</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2022-10-25T12:46:11+00:00",
                 "updatedAt": "2022-10-25T14:28:02+00:00",
                 "subtitle": "Introducing Pre-Infusion on the Linea Mini, Auto-Backflush, Boiler Control, and more.",
                 "image": "https://cms.lamarzocco.io/uploads/images/6357ddc89b783286612576.png",
                 "videoUri": "https://www.youtube.com/embed/_AfBYkDbbpQ",
-                "descriptionSecond": "<p>In addition to these new features, connected machine owners will have access to the following<strong>:</strong></p>\r\n\r\n<p>&ndash; Remote ability to turn the machine on or off</p>\r\n\r\n<p>&ndash; Creation of an on/off schedule</p>\r\n\r\n<p>&ndash; Boiler temperature status and control</p>\r\n\r\n<p>&ndash; Enabling and setting pre-brewing on/off times</p>\r\n\r\n<p>&ndash; Machine Stats &amp; Total Shot Counter</p>\r\n\r\n<p>&ndash; Setting of auto-volumetrics on the GS3 by number of &ldquo;pulses&rdquo;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><em>Linea Minis with serial numbers starting with&nbsp;<strong>LM015906</strong>&nbsp;and GS3s starting with serial number&nbsp;<strong>GS012984</strong>&nbsp;come standard with the new connected board.</em></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p style=\"margin-left:400px\"><br />\r\n&nbsp;</p>"
+                "descriptionSecond": "<p>snip</p>"
             },
             {
                 "uuid": "1f41ccef-1ad6-4320-b793-27a82d123fba",
                 "name": "a new recipe and a good coffee: welcome home!",
-                "description": "<p>Dried fruits and nuts are great snacks for controlling your appetite throughout the day, whilst also providing a valuable source of vitamins and natural antioxidants.</p>\r\n\r\n<p>For a great coffee pairing, we suggest an Ethiopian, naturally processed, coffee with fruity acidic notes and smooth chocolate aftertaste- brewed with the Linea Mini. Follow the recipe and&hellip;Welcome Home!</p>\r\n\r\n<p><strong>GRANOLA RECIPE</strong></p>\r\n\r\n<p><strong>Ingredients:</strong></p>\r\n\r\n<ul>\r\n\t<li>3 cups BIO rolled oats</li>\r\n\t<li>1 1&frasl;2 &nbsp;cups high quality nuts (such as PGI Piemonte hazelnuts, almonds or nuts)</li>\r\n\t<li>1 cup seeds (sunflowers, squash and sesame)</li>\r\n\t<li>1&frasl;2 cup dried fruit (cranberries, raspberries or coconut or banana)</li>\r\n\t<li>1&frasl;2 cup BIO chestnut honey</li>\r\n\t<li>2 tablespoons whole brown sugar</li>\r\n\t<li>1&frasl;4 cup sesame oil or extra virgin olive oil</li>\r\n</ul>\r\n\r\n<p>Chop the nuts coarsely and preheat the oven to 260&deg;.<br />\r\nIn a large skillet melt the honey along with the oil, then toast the oats, chopped nuts and seeds. Add the sugar and the dried fruits and mix well for a few minutes.</p>\r\n\r\n<p>Place a sheet of baking paper in the base of baking tray, and cook for about 40 minutes, stirring once during the cooking process. Once cooled, you can keep the granola in an airtight container for about 10 days.</p>\r\n\r\n<p>This dish is excellent for a healthy morning boost but served with yogurt, fresh fruits and accompanied by a good espresso, it really elevates it to sheer breakfast excellence!</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2019-05-22T13:03:47+00:00",
                 "updatedAt": "2020-03-12T15:05:40+00:00",
                 "subtitle": "A good espresso and an oats granola with berries to start your day differently. Here's a quick and healthy recipe for your breakfast",
@@ -1205,7 +1246,7 @@ to come, sometimes seems to time out 524 cloudflare
             {
                 "uuid": "22d164e3-31f8-458c-a2cf-497076fadd58",
                 "name": "humans of la marzocco home: Piero Bambi story",
-                "description": "<p>My first memories are about espresso machines. Coffee came later.<br />\r\nWhen I was a kid I just needed to go downstairs to be in the workshop. Getting to know mechanics was way easier than learning to recognize a good espresso. I used to join my father and uncle for machine installations around Tuscany and those are the first coffees I remember drinking. That&rsquo;s also because when you are a kid, you usually just drink caffellatte. When I was 14, I went with my uncle to install a lever machine at a caf&egrave; and two usual customers were there to assist the entire installation. Once we were done, my uncle offered them an espresso.</p>\r\n\r\n<p>He asked them if they found the coffee tasty and they replied that they preferred the one brewed with the old machine. Then the caf&egrave; owner grabbed a portafilter with some old coffee grounds and added some new grounds. The two customers found it excellent. Caffeine gives you addiction so when you get used to a certain blend, it is hard to change. That episode taught me not to ask how the coffee tastes, but instead to say something like &ldquo;It&rsquo;s good. Isn&rsquo;t it?&rdquo;; this way I express my thought on a certain blend and I tend to encourage a positive opinion.</p>",
+                "description": "<p>snip</p>",
                 "createdAt": "2019-05-22T13:01:01+00:00",
                 "updatedAt": "2020-03-12T15:05:03+00:00",
                 "subtitle": "When did Piero Bambi, La Marzocco Honorary President, start building espresso machines?",
@@ -1231,3 +1272,30 @@ to come, sometimes seems to time out 524 cloudflare
 }
 ```
 
+## Latest privacy policy
+
+`GET https:/cms.lamarzocco.com/api/professional/privacy/latest-to-accept`
+
+```json
+{
+    "status": true,
+    "status_code": 200,
+    "data": {
+        "uuid": "8e22a214-9654-42ce-af99-f2bd6331ec66",
+        "name": "2022.07.28",
+        "privacyVersion": 2,
+        "parentTranslate": null,
+        "lang": null,
+        "title": "2022.07.28",
+        "mainTitle": "<p>&lt;p&gt;The &lt;a href=&quot;https://cms.lamarzocco.io/privacy&quot;&gt;Terms of Service&lt;/a&gt; and the &lt;a href=&quot;https://cms.lamarzocco.io/privacy&quot;&gt;Privacy Policy&lt;/a&gt;&amp;nbsp;have been updated. We ask you read the new documen",
+        "textPrivacy": "<p>snip</p>",
+        "labelDisposalCommercial": "Direct Marketing",
+        "textDisposalCommercial": "<p>to receive information and promotional material concerning La Marzocco activities, products and services, and to be contacted for market surveys</p>",
+        "labelDisposalThirdParty": "Disclosure to third parties",
+        "textDisposalThirdParty": "<p>to the disclosure of my Data to third-party companies for their own direct marketing purposes</p>",
+        "labelDisposalProfile": "Profiling",
+        "textDisposalProfile": "<p>to the analysis of my interests, habits and choices (related to both purchasing and the use of La Marzocco digital services), even in order to receive customised information and promotional material</p>",
+        "footerTextPrivacy": "<p>&lt;p&gt;By tapping update, you agree with our &lt;a href=&quot;https://cms.lamarzocco.io/privacy&quot;&gt;Terms of Service&lt;/a&gt; and &lt;a href=&quot;https://cms.lamarzocco.io/privacy&quot;&gt;Privacy Policy&lt;/a&gt;&lt;/p&gt;</p>"
+    }
+}
+```
