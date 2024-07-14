@@ -29,6 +29,66 @@ password: {user_password}
 
 tbc
 
+## TokenGet - Used to get the bearer token for local access.
+
+code1: Z&}ZnpWwrQ=jVe<
+code2: Iv`^1c7i.qn)dD2
+
+user_digest = SHA256({user-email}-{code1}{code2})
+
+`POST https://gw-lmz.lamarzocco.io/v1/professional/machines/awsproxy/{serialNumber}/things/{relayrDeviceId}/commands`
+```json
+{
+    "commandName": "TokenGet",
+    "deviceId": "{relayrDeviceId}",
+    "parameters": {
+        "user_digest": "{user_digest}"
+    },
+    "taskName": "{relayrDeviceId}-TokenGet-{time}" // I don't think this is critical, just needs to be unique
+}
+```
+RESPONSE
+```json
+{
+    "ackTopic": "lamar/cmd-ack/settings/{relayrDeviceId}/TokenGet",
+    "commandId": "{commandId}",
+    "commandPayload": {
+        "ack-topic": "lamar/cmd-ack/settings/{relayrDeviceId}/TokenGet",
+        "description": "app-professional",
+        "id": "{commandId}",
+        "name": "TokenGet",
+        "parameter": {
+            "user_digest": "{user_digest}"
+        },
+        "res-topic": "lamar/cmd-res/settings/{relayrDeviceId}/TokenGet",
+        "ts": 1720975531366
+    },
+    "createdAt": 1720975531366,
+    "resTopic": "lamar/cmd-res/settings/{relayrDeviceId}/TokenGet",
+    "responsePayload": null,
+    "status": "PENDING",
+    "thingId": "{relayrDeviceId}",
+    "topic": "lamar/cmd/settings/{relayrDeviceId}/TokenGet",
+    "updatedAt": null
+}
+```
+
+`GET https://gw-lmz.lamarzocco.io/v1/professional/machines/awsproxy/{serialNumber}/things/{relayrDeviceId}/commands/{commandId}`
+
+RESPONSE
+```json
+"responsePayload": {
+        "id": "{deviceId}",
+        "message": "{user_digest}: {localtoken}",
+        "status": "success",
+        "topic": "lamar/cmd-res/settings/{deviceId}/TokenGet",
+        "ts": "2024-07-14T16:45:31.645042109Z"
+    },
+```
+
+
+
+
 ## La Marzocco customer account information
 
 `GET https://cms.lamarzocco.io/api/professional/customer`
