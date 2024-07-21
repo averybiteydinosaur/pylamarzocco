@@ -15,10 +15,12 @@ from httpx import RequestError
 
 from .const import (
     CUSTOMER_URL,
+    PROFESSIONAL_URL,
     DEFAULT_CLIENT_ID,
     DEFAULT_CLIENT_SECRET,
     GW_AWS_PROXY_BASE_URL,
     GW_MACHINE_BASE_URL,
+    GW_MACHINE_BASE_URL_PRO,
     TOKEN_URL,
     BoilerType,
     FirmwareType,
@@ -91,13 +93,18 @@ class LaMarzoccoCloudClient:
             f"Request to endpoint {response.url} failed with status code {response.status_code}"
         )
 
-    async def get_customer_fleet(self) -> dict[str, LaMarzoccoDeviceInfo]:
+    async def get_customer_fleet(self, account_type=None) -> dict[str, LaMarzoccoDeviceInfo]:
         """Get basic machine info from the customer endpoint."""
 
         machine_info: dict[str, LaMarzoccoDeviceInfo] = {}
 
-        data = await self._rest_api_call(url=CUSTOMER_URL, method=HTTPMethod.GET)
-        fleet = data.get("fleet", [])
+        if account_type == "Professional":
+            url = f"{PROFESSIONAL_URL}/fleet"
+            fleet = await self._rest_api_call(url=url, method=HTTPMethod.GET)
+        else: #default to Home account
+            data = await self._rest_api_call(url=CUSTOMER_URL, method=HTTPMethod.GET)
+            fleet = data.get("fleet", [])
+
         for machine_data in fleet:
             key = machine_data.get("communicationKey")
             name = machine_data.get("name")
@@ -105,12 +112,14 @@ class LaMarzoccoCloudClient:
             machine = machine_data.get("machine", {})
             serial_number = machine.get("serialNumber")
             model_name = machine.get("model", {}).get("name")
+            relayrDeviceId = machine.get("relayrDeviceId")
 
             machine_info[serial_number] = LaMarzoccoDeviceInfo(
                 serial_number=serial_number,
                 name=name,
                 communication_key=key,
                 model=model_name,
+                relayrId=relayrDeviceId
             )
 
         return machine_info

@@ -153,6 +153,7 @@ class LaMarzoccoDeviceInfo:
     name: str
     communication_key: str
     model: str
+    relayrId :str
 
 
 class LaMarzoccoCloudScheduleDay(TypedDict):
