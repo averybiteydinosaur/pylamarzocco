@@ -31,7 +31,9 @@ class LaMarzoccoDevice:
     def __init__(
         self,
         model: str,
+        account_type: str,
         serial_number: str,
+        relayr_id: str,
         name: str,
         cloud_client: LaMarzoccoCloudClient | None = None,
         local_client: LaMarzoccoLocalClient | None = None,
@@ -40,7 +42,9 @@ class LaMarzoccoDevice:
         """Initializes a new LaMarzoccoMachine instance"""
 
         self.model: str = model
+        self.account_type:str = account_type
         self.serial_number: str = serial_number
+        self.relayr_id: str = relayr_id
         self.name: str = name
         self.firmware: dict[FirmwareType, LaMarzoccoFirmware] = {}
         self.statistics: LaMarzoccoStatistics | None = None
@@ -119,7 +123,7 @@ class LaMarzoccoDevice:
 
             # if local update failed, try to update from cloud
             if self._cloud_client is not None and not raw_config:
-                raw_config = await self._cloud_client.get_config(self.serial_number)
+                raw_config = await self._cloud_client.get_config(self.serial_number,self.relayr_id)
 
             self.parse_config(raw_config)
 

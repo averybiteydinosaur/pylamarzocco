@@ -22,8 +22,8 @@ async def main():
         username=data["username"],
         password=data["password"],
     )
-    fleet = await cloud_client.get_customer_fleet()
-
+    fleet = await cloud_client.get_config("GN000126","8374f9c5-0a03-4d93-b8b4-51dd3bf50e76")
+    input(fleet)
     # serial = list(fleet.keys())[0]
 
     local_client = LaMarzoccoLocalClient(

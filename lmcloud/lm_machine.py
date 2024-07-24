@@ -47,7 +47,9 @@ class LaMarzoccoMachine(LaMarzoccoDevice):
     def __init__(
         self,
         model: MachineModel,
+        account_type: str,
         serial_number: str,
+        relayr_id: str,
         name: str,
         cloud_client: LaMarzoccoCloudClient | None = None,
         local_client: LaMarzoccoLocalClient | None = None,
@@ -57,7 +59,9 @@ class LaMarzoccoMachine(LaMarzoccoDevice):
 
         super().__init__(
             model=model,
+            account_type=account_type,
             serial_number=serial_number,
+            relayr_id=relayr_id,
             name=name,
             cloud_client=cloud_client,
             local_client=local_client,

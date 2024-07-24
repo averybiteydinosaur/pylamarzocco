@@ -124,11 +124,210 @@ class LaMarzoccoCloudClient:
 
         return machine_info
 
-    async def get_config(self, serial_number: str) -> dict[str, Any]:
+    async def get_config(self, serial_number: str, relayr_id=None) -> dict[str, Any]:
         """Get configuration from cloud"""
 
-        url = f"{GW_MACHINE_BASE_URL}/{serial_number}/configuration"
-        return await self._rest_api_call(url=url, method=HTTPMethod.GET)
+        if relayr_id is None: #default to Home account TODO check relayr_id does not exist for home version
+            url = f"{GW_MACHINE_BASE_URL}/{serial_number}/configuration"
+            return await self._rest_api_call(url=url, method=HTTPMethod.GET)   
+        else:
+            #url = f"{GW_MACHINE_BASE_URL_PRO}/awsproxy/{serial_number}/things/{relayr_id}/metrics" TODO
+            random_bs = {
+    "version": "v1",
+    "preinfusionModesAvailable": [
+        "ByDoseType"
+    ],
+    "machineCapabilities": [
+        {
+            "family": "GS3AV",
+            "groupsNumber": 1,
+            "coffeeBoilersNumber": 1,
+            "hasCupWarmer": False,
+            "steamBoilersNumber": 1,
+            "teaDosesNumber": 1,
+            "machineModes": [
+                "BrewingMode",
+                "StandBy"
+            ],
+            "schedulingType": "weeklyScheduling"
+        }
+    ],
+    "machine_sn": "xxx",
+    "machine_hw": "2",
+    "isPlumbedIn": True,
+    "isBackFlushEnabled": False,
+    "standByTime": 0,
+    "tankStatus": True,
+    "groupCapabilities": [
+        {
+            "capabilities": {
+                "groupType": "AV_Group",
+                "groupNumber": "Group1",
+                "boilerId": "CoffeeBoiler1",
+                "hasScale": False,
+                "hasFlowmeter": True,
+                "numberOfDoses": 4
+            },
+            "doses": [
+                {
+                    "groupNumber": "Group1",
+                    "doseIndex": "DoseA",
+                    "doseType": "PulsesType",
+                    "stopTarget": 135
+                },
+                {
+                    "groupNumber": "Group1",
+                    "doseIndex": "DoseB",
+                    "doseType": "PulsesType",
+                    "stopTarget": 97
+                },
+                {
+                    "groupNumber": "Group1",
+                    "doseIndex": "DoseC",
+                    "doseType": "PulsesType",
+                    "stopTarget": 108
+                },
+                {
+                    "groupNumber": "Group1",
+                    "doseIndex": "DoseD",
+                    "doseType": "PulsesType",
+                    "stopTarget": 121
+                }
+            ],
+            "doseMode": {
+                "groupNumber": "Group1",
+                "brewingType": "PulsesType"
+            }
+        }
+    ],
+    "machineMode": "BrewingMode",
+    "teaDoses": {
+        "DoseA": {
+            "doseIndex": "DoseA",
+            "stopTarget": 8
+        }
+    },
+    "boilers": [
+        {
+            "id": "SteamBoiler",
+            "isEnabled": True,
+            "target": 123.90000152587891,
+            "current": 123.80000305175781
+        },
+        {
+            "id": "CoffeeBoiler1",
+            "isEnabled": True,
+            "target": 95,
+            "current": 96.5
+        }
+    ],
+    "boilerTargetTemperature": {
+        "SteamBoiler": 123.90000152587891,
+        "CoffeeBoiler1": 95
+    },
+    "preinfusionMode": {
+        "Group1": {
+            "groupNumber": "Group1",
+            "preinfusionStyle": "PreinfusionByDoseType"
+        }
+    },
+    "preinfusionSettings": {
+        "mode": "TypeB",
+        "Group1": [
+            {
+                "groupNumber": "Group1",
+                "doseType": "DoseA",
+                "preWetTime": 0.5,
+                "preWetHoldTime": 1
+            },
+            {
+                "groupNumber": "Group1",
+                "doseType": "DoseB",
+                "preWetTime": 0.5,
+                "preWetHoldTime": 1
+            },
+            {
+                "groupNumber": "Group1",
+                "doseType": "DoseC",
+                "preWetTime": 3.2999999523162842,
+                "preWetHoldTime": 3.2999999523162842
+            },
+            {
+                "groupNumber": "Group1",
+                "doseType": "DoseD",
+                "preWetTime": 2,
+                "preWetHoldTime": 2
+            }
+        ]
+    },
+    "weeklySchedulingConfig": {
+        "enabled": True,
+        "monday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "tuesday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "wednesday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "thursday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "friday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "saturday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        },
+        "sunday": {
+            "enabled": True,
+            "h_on": 6,
+            "h_off": 16,
+            "m_on": 0,
+            "m_off": 0
+        }
+    },
+    "clock": "1901-07-08T10:29:00",
+    "firmwareVersions": [
+        {
+            "name": "machine_firmware",
+            "fw_version": "1.40"
+        },
+        {
+            "name": "gateway_firmware",
+            "fw_version": "v3.1-rc4"
+        }
+    ]
+}    
+
+            return random_bs
+        
+        
 
     async def set_power(
         self,
@@ -374,8 +573,24 @@ class LaMarzoccoCloudClient:
     async def get_firmware(
         self,
         serial_number: str,
+        account_type=None,
     ) -> dict[FirmwareType, LaMarzoccoFirmware]:
         """Get Firmware details."""
+
+        #TODO
+        if account_type is None:
+            bs = {
+                "MACHINE" : LaMarzoccoFirmware(
+                    current_version="magicPixyDust",
+                    latest_version="magicPixyDust",
+                    ),
+                "GATEWAY" : LaMarzoccoFirmware(
+                    current_version="magicPixyDust",
+                    latest_version="magicPixyDust",
+                ),
+                
+            }
+            return bs
 
         url = f"{GW_MACHINE_BASE_URL}/{serial_number}/firmware/"
         result = await self._rest_api_call(url=url, method=HTTPMethod.GET)
