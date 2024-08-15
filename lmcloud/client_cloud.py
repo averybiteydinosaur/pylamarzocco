@@ -129,10 +129,61 @@ class LaMarzoccoCloudClient:
 
         if relayr_id is None: #default to Home account TODO check relayr_id does not exist for home version
             url = f"{GW_MACHINE_BASE_URL}/{serial_number}/configuration"
-            return await self._rest_api_call(url=url, method=HTTPMethod.GET)   
+            return await self._rest_api_call(url=url, method=HTTPMethod.GET)
         else:
             url = f"{GW_MACHINE_BASE_URL_PRO}/awsproxy/{serial_number}/things/{relayr_id}/metrics" #TODO
-        return await self._rest_api_call(url=url, method=HTTPMethod.GET)     
+            data = await self._rest_api_call(url=url, method=HTTPMethod.GET)
+            return {
+    "version": "v1",
+    "preinfusionModesAvailable": [
+        "ByDoseType"
+    ],
+    "machineCapabilities": data["MachineConfiguration"]["value"]["machineCapabilities"],
+    "machine_sn": "xxx",
+    "machine_hw": "2",
+    "isPlumbedIn": True,
+    "isBackFlushEnabled": False,
+    "standByTime": 0,
+    "tankStatus": True,
+    "groupCapabilities": data["MachineConfiguration"]["value"]["groupCapabilities"],
+    "machineMode": "BrewingMode",
+    "teaDoses": data["MachineConfiguration"]["value"]["teaDoses"],
+    "boilers": [
+        {
+            "id": "SteamBoiler",
+            "isEnabled": True,
+            "target": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["SteamBoiler"],
+            "current": data["SteamBoilerUpdateTemperature"]["value"]
+        },
+        {
+            "id": "CoffeeBoiler1",
+            "isEnabled": True,
+            "target": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["CoffeeBoiler1"],
+            "current": data["CoffeeBoiler1UpdateTemperature"]["value"]
+        }
+    ],
+    "boilerTargetTemperature": {
+        "SteamBoiler": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["SteamBoiler"],
+        "CoffeeBoiler1": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["CoffeeBoiler1"]
+    },
+    "preinfusionMode": data["MachineConfiguration"]["value"]["preinfusionMode"],
+    "preinfusionSettings": {},
+    "clock": "1901-07-08T10:29:00",
+    "firmwareVersions": [
+        {
+            "name": "machine_firmware",
+            "fw_version": "1.40"
+        },
+        {
+            "name": "gateway_firmware",
+            "fw_version": "v3.1-rc4"
+        }
+    ]
+}
+
+
+
+
 
     async def set_power(
         self,
@@ -378,12 +429,12 @@ class LaMarzoccoCloudClient:
     async def get_firmware(
         self,
         serial_number: str,
+        account_type=None,
     ) -> dict[FirmwareType, LaMarzoccoFirmware]:
         """Get Firmware details."""
 
         #TODO
-        input(self.account_type)
-        if self.account_type == "Professional":
+        if account_type is None:
             bs = {
                 "machine" : LaMarzoccoFirmware(
                     current_version="1.4",
@@ -392,7 +443,7 @@ class LaMarzoccoCloudClient:
                 "gateway" : LaMarzoccoFirmware(
                     current_version="v3.1-rc4",
                     latest_version="v3.1-rc4",
-                ),                
+                ),
             }
             return bs
 
@@ -453,7 +504,7 @@ class LaMarzoccoCloudClient:
             return [
         {
             "coffeeType": 0,
-            "count": 167
+            "count": 666
         },
         {
             "coffeeType": 1,
@@ -473,7 +524,7 @@ class LaMarzoccoCloudClient:
         },
         {
             "coffeeType": -1,
-            "count": 228
+            "count": 666
         }
     ]
 

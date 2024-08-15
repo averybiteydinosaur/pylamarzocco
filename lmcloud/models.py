@@ -74,7 +74,7 @@ class LaMarzoccoPrebrewConfiguration:
 
     @property
     def preinfusion_time(self) -> float:
-        """Prefinfusion time is off time"""
+        """Preinfusion time is off time"""
         return self.off_time
 
 

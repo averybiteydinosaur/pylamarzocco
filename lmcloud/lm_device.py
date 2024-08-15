@@ -62,7 +62,16 @@ class LaMarzoccoDevice:
     def parse_config(self, raw_config: dict[str, Any]) -> None:
         """Parse the config object."""
 
-        self.firmware = parse_firmware(raw_config["firmwareVersions"], self.firmware)
+        self.firmware = parse_firmware([
+        {
+            "name": "machine_firmware",
+            "fw_version": "1.40"
+        },
+        {
+            "name": "gateway_firmware",
+            "fw_version": "v3.1-rc4"
+        }
+    ], self.firmware) #TODO unmock this
 
     @property
     def cloud_client(self) -> LaMarzoccoCloudClient:
@@ -130,7 +139,7 @@ class LaMarzoccoDevice:
     async def get_statistics(self) -> None:
         """Update the statistics"""
 
-        raw_statistics = await self.cloud_client.get_statistics(self.serial_number)
+        raw_statistics = await self.cloud_client.get_statistics(self.serial_number,self.account_type)
         self.parse_statistics(raw_statistics)
 
     async def get_firmware(self) -> None:

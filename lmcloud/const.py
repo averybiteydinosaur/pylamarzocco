@@ -11,7 +11,7 @@ class MachineModel(StrEnum):
     GS3_MP = "GS3 MP"
     LINEA_MINI = "Linea Mini"
     LINEA_MICRA = "Micra"
-    GB5 = "GB5"    
+    GB5 = "GB5"
 
 
 class GrinderModel(StrEnum):
@@ -83,6 +83,7 @@ KEYS_PER_MODEL: Final = {
     MachineModel.LINEA_MINI: 0,
     MachineModel.GS3_AV: 4,
     MachineModel.GS3_MP: 0,
+    MachineModel.GB5: 4, #TODO or 2x4 Probably?
 }
 
 
