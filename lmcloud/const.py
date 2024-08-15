@@ -11,6 +11,7 @@ class MachineModel(StrEnum):
     GS3_MP = "GS3 MP"
     LINEA_MINI = "Linea Mini"
     LINEA_MICRA = "Micra"
+    GB5 = "GB5"    
 
 
 class GrinderModel(StrEnum):

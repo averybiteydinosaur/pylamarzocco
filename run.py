@@ -22,8 +22,10 @@ async def main():
         username=data["username"],
         password=data["password"],
     )
-    fleet = await cloud_client.get_config("GN000126","8374f9c5-0a03-4d93-b8b4-51dd3bf50e76")
-    input(fleet)
+    fleet = await cloud_client.get_customer_fleet("Professional")
+
+    config = await cloud_client.get_config(fleet["GN000126"].serial_number,fleet["GN000126"].relayrId)
+    #input(fleet)
     # serial = list(fleet.keys())[0]
 
     local_client = LaMarzoccoLocalClient(
@@ -54,10 +56,14 @@ async def main():
         model=MachineModel(data["model"]),
         serial_number=data["serial"],
         name=data["serial"],
+        account_type=data["account_type"],
+        relayr_id=fleet["GN000126"].relayrId,
         cloud_client=cloud_client,
         local_client=local_client,
         # bluetooth_client=bluetooth_client,
     )
+
+    input("oh no")
 
     await machine.websocket_connect()
     # await asyncio.sleep(300)

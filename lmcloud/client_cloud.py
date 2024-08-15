@@ -131,203 +131,8 @@ class LaMarzoccoCloudClient:
             url = f"{GW_MACHINE_BASE_URL}/{serial_number}/configuration"
             return await self._rest_api_call(url=url, method=HTTPMethod.GET)   
         else:
-            #url = f"{GW_MACHINE_BASE_URL_PRO}/awsproxy/{serial_number}/things/{relayr_id}/metrics" TODO
-            random_bs = {
-    "version": "v1",
-    "preinfusionModesAvailable": [
-        "ByDoseType"
-    ],
-    "machineCapabilities": [
-        {
-            "family": "GS3AV",
-            "groupsNumber": 1,
-            "coffeeBoilersNumber": 1,
-            "hasCupWarmer": False,
-            "steamBoilersNumber": 1,
-            "teaDosesNumber": 1,
-            "machineModes": [
-                "BrewingMode",
-                "StandBy"
-            ],
-            "schedulingType": "weeklyScheduling"
-        }
-    ],
-    "machine_sn": "xxx",
-    "machine_hw": "2",
-    "isPlumbedIn": True,
-    "isBackFlushEnabled": False,
-    "standByTime": 0,
-    "tankStatus": True,
-    "groupCapabilities": [
-        {
-            "capabilities": {
-                "groupType": "AV_Group",
-                "groupNumber": "Group1",
-                "boilerId": "CoffeeBoiler1",
-                "hasScale": False,
-                "hasFlowmeter": True,
-                "numberOfDoses": 4
-            },
-            "doses": [
-                {
-                    "groupNumber": "Group1",
-                    "doseIndex": "DoseA",
-                    "doseType": "PulsesType",
-                    "stopTarget": 135
-                },
-                {
-                    "groupNumber": "Group1",
-                    "doseIndex": "DoseB",
-                    "doseType": "PulsesType",
-                    "stopTarget": 97
-                },
-                {
-                    "groupNumber": "Group1",
-                    "doseIndex": "DoseC",
-                    "doseType": "PulsesType",
-                    "stopTarget": 108
-                },
-                {
-                    "groupNumber": "Group1",
-                    "doseIndex": "DoseD",
-                    "doseType": "PulsesType",
-                    "stopTarget": 121
-                }
-            ],
-            "doseMode": {
-                "groupNumber": "Group1",
-                "brewingType": "PulsesType"
-            }
-        }
-    ],
-    "machineMode": "BrewingMode",
-    "teaDoses": {
-        "DoseA": {
-            "doseIndex": "DoseA",
-            "stopTarget": 8
-        }
-    },
-    "boilers": [
-        {
-            "id": "SteamBoiler",
-            "isEnabled": True,
-            "target": 123.90000152587891,
-            "current": 123.80000305175781
-        },
-        {
-            "id": "CoffeeBoiler1",
-            "isEnabled": True,
-            "target": 95,
-            "current": 96.5
-        }
-    ],
-    "boilerTargetTemperature": {
-        "SteamBoiler": 123.90000152587891,
-        "CoffeeBoiler1": 95
-    },
-    "preinfusionMode": {
-        "Group1": {
-            "groupNumber": "Group1",
-            "preinfusionStyle": "PreinfusionByDoseType"
-        }
-    },
-    "preinfusionSettings": {
-        "mode": "TypeB",
-        "Group1": [
-            {
-                "groupNumber": "Group1",
-                "doseType": "DoseA",
-                "preWetTime": 0.5,
-                "preWetHoldTime": 1
-            },
-            {
-                "groupNumber": "Group1",
-                "doseType": "DoseB",
-                "preWetTime": 0.5,
-                "preWetHoldTime": 1
-            },
-            {
-                "groupNumber": "Group1",
-                "doseType": "DoseC",
-                "preWetTime": 3.2999999523162842,
-                "preWetHoldTime": 3.2999999523162842
-            },
-            {
-                "groupNumber": "Group1",
-                "doseType": "DoseD",
-                "preWetTime": 2,
-                "preWetHoldTime": 2
-            }
-        ]
-    },
-    "weeklySchedulingConfig": {
-        "enabled": True,
-        "monday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "tuesday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "wednesday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "thursday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "friday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "saturday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        },
-        "sunday": {
-            "enabled": True,
-            "h_on": 6,
-            "h_off": 16,
-            "m_on": 0,
-            "m_off": 0
-        }
-    },
-    "clock": "1901-07-08T10:29:00",
-    "firmwareVersions": [
-        {
-            "name": "machine_firmware",
-            "fw_version": "1.40"
-        },
-        {
-            "name": "gateway_firmware",
-            "fw_version": "v3.1-rc4"
-        }
-    ]
-}    
-
-            return random_bs
-        
-        
+            url = f"{GW_MACHINE_BASE_URL_PRO}/awsproxy/{serial_number}/things/{relayr_id}/metrics" #TODO
+        return await self._rest_api_call(url=url, method=HTTPMethod.GET)     
 
     async def set_power(
         self,
@@ -573,22 +378,21 @@ class LaMarzoccoCloudClient:
     async def get_firmware(
         self,
         serial_number: str,
-        account_type=None,
     ) -> dict[FirmwareType, LaMarzoccoFirmware]:
         """Get Firmware details."""
 
         #TODO
-        if account_type is None:
+        input(self.account_type)
+        if self.account_type == "Professional":
             bs = {
-                "MACHINE" : LaMarzoccoFirmware(
-                    current_version="magicPixyDust",
-                    latest_version="magicPixyDust",
+                "machine" : LaMarzoccoFirmware(
+                    current_version="1.4",
+                    latest_version="1.4",
                     ),
-                "GATEWAY" : LaMarzoccoFirmware(
-                    current_version="magicPixyDust",
-                    latest_version="magicPixyDust",
-                ),
-                
+                "gateway" : LaMarzoccoFirmware(
+                    current_version="v3.1-rc4",
+                    latest_version="v3.1-rc4",
+                ),                
             }
             return bs
 
@@ -635,14 +439,43 @@ class LaMarzoccoCloudClient:
         )
         return False
 
-    async def get_statistics(self, serial_number: str) -> list[dict[str, Any]]:
+    async def get_statistics(self, serial_number: str, account_type=None) -> list[dict[str, Any]]:
         """Get statistics from cloud."""
 
-        _LOGGER.debug("Getting statistics from cloud")
+        #TODO
+        if account_type is None:
+            _LOGGER.debug("Getting statistics from cloud")
 
-        url = f"{GW_MACHINE_BASE_URL}/{serial_number}/statistics/counters"
+            url = f"{GW_MACHINE_BASE_URL}/{serial_number}/statistics/counters"
 
-        return await self._rest_api_call(url=url, method=HTTPMethod.GET)
+            return await self._rest_api_call(url=url, method=HTTPMethod.GET)
+        else:
+            return [
+        {
+            "coffeeType": 0,
+            "count": 167
+        },
+        {
+            "coffeeType": 1,
+            "count": 0
+        },
+        {
+            "coffeeType": 2,
+            "count": 0
+        },
+        {
+            "coffeeType": 3,
+            "count": 0
+        },
+        {
+            "coffeeType": 4,
+            "count": 0
+        },
+        {
+            "coffeeType": -1,
+            "count": 228
+        }
+    ]
 
     async def get_daily_statistics(self, serial_number: str, start_date: datetime, end_date: datetime, timezone_offset: int, timezone: str) -> list[dict[str, Any]]:
         """Get daily statistics from cloud."""
