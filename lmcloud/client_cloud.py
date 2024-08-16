@@ -178,7 +178,15 @@ class LaMarzoccoCloudClient:
             "name": "gateway_firmware",
             "fw_version": "v3.1-rc4"
         }
-    ]
+    ],
+    "WaterHardness": data["WaterHardness"],
+    "WaterConductivity": data["WaterConductivity"],
+    "SystemInfo": data["SystemInfo"],
+    "BrewingSnapshotGroup1": data["BrewingSnapshotGroup1"], 
+    "BrewingSnapshotGroup2": data["BrewingSnapshotGroup2"],
+    "CoffeeBoiler1UpdateSetPoint1": data["CoffeeBoiler1UpdateSetPoint1"],
+    "SteamBoilerUpdateSetPoint": data["SteamBoilerUpdateSetPoint"],
+
 }
 
 
