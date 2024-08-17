@@ -85,6 +85,8 @@ class LaMarzoccoMachine(LaMarzoccoDevice):
                 mode=SmartStandbyMode.POWER_ON,
             ),
             wake_up_sleep_entries={},
+            water_conductivity = 0,
+            water_hardness = 0,
         )
         self.statistics: LaMarzoccoCoffeeStatistics = LaMarzoccoCoffeeStatistics(
             drink_stats={},
