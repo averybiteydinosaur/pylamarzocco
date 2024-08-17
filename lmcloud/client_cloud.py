@@ -184,7 +184,7 @@ class LaMarzoccoCloudClient:
     "SystemInfo": data["SystemInfo"],
     "BrewingSnapshotGroup1": data["BrewingSnapshotGroup1"], 
     "BrewingSnapshotGroup2": data["BrewingSnapshotGroup2"],
-    "CoffeeBoiler1UpdateSetPoint1": data["CoffeeBoiler1UpdateSetPoint1"],
+    "CoffeeBoiler1UpdateSetPoint": data["CoffeeBoiler1UpdateSetPoint"],
     "SteamBoilerUpdateSetPoint": data["SteamBoilerUpdateSetPoint"],
 
 }
