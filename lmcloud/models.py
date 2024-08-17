@@ -133,6 +133,8 @@ class LaMarzoccoMachineConfig(LaMarzoccoDeviceConfig):
     brew_active: bool
     brew_active_duration: float
     backflush_enabled: bool
+    water_conductivity: int
+    water_hardness: int
 
     @property
     def steam_level(self) -> SteamLevel:

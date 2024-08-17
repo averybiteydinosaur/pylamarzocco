@@ -147,6 +147,8 @@ class LaMarzoccoMachine(LaMarzoccoDevice):
         self.config.wake_up_sleep_entries = parse_wakeup_sleep_entries(
             raw_config.get("wakeUpSleepEntries", {})
         )
+        self.config.water_conductivity = raw_config["WaterConductivity"]
+        self.config.water_hardness = raw_config["WaterHardness"]
 
     def parse_statistics(self, raw_statistics: list[dict[str, Any]]) -> None:
         """Parse the statistics object."""
