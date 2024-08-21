@@ -132,62 +132,7 @@ class LaMarzoccoCloudClient:
             return await self._rest_api_call(url=url, method=HTTPMethod.GET)
         else:
             url = f"{GW_MACHINE_BASE_URL_PRO}/awsproxy/{serial_number}/things/{relayr_id}/metrics" #TODO
-            data = await self._rest_api_call(url=url, method=HTTPMethod.GET)
-            return {
-    "version": "v1",
-    "preinfusionModesAvailable": [
-        "ByDoseType"
-    ],
-    "machineCapabilities": data["MachineConfiguration"]["value"]["machineCapabilities"],
-    "machine_sn": "xxx",
-    "machine_hw": "2",
-    "isPlumbedIn": True,
-    "isBackFlushEnabled": False,
-    "standByTime": 0,
-    "tankStatus": True,
-    "groupCapabilities": data["MachineConfiguration"]["value"]["groupCapabilities"],
-    "machineMode": "BrewingMode",
-    "teaDoses": data["MachineConfiguration"]["value"]["teaDoses"],
-    "boilers": [
-        {
-            "id": "SteamBoiler",
-            "isEnabled": True,
-            "target": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["SteamBoiler"],
-            "current": data["SteamBoilerUpdateTemperature"]["value"]
-        },
-        {
-            "id": "CoffeeBoiler1",
-            "isEnabled": True,
-            "target": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["CoffeeBoiler1"],
-            "current": data["CoffeeBoiler1UpdateTemperature"]["value"]
-        }
-    ],
-    "boilerTargetTemperature": {
-        "SteamBoiler": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["SteamBoiler"],
-        "CoffeeBoiler1": data["MachineConfiguration"]["value"]["boilerTargetTemperature"]["CoffeeBoiler1"]
-    },
-    "preinfusionMode": data["MachineConfiguration"]["value"]["preinfusionMode"],
-    "preinfusionSettings": {},
-    "clock": "1901-07-08T10:29:00",
-    "firmwareVersions": [
-        {
-            "name": "machine_firmware",
-            "fw_version": "1.40"
-        },
-        {
-            "name": "gateway_firmware",
-            "fw_version": "v3.1-rc4"
-        }
-    ],
-    "WaterHardness": data["WaterHardness"],
-    "WaterConductivity": data["WaterConductivity"],
-    "SystemInfo": data["SystemInfo"],
-    "BrewingSnapshotGroup1": data["BrewingSnapshotGroup1"], 
-    "BrewingSnapshotGroup2": data["BrewingSnapshotGroup2"],
-    "CoffeeBoiler1UpdateSetPoint": data["CoffeeBoiler1UpdateSetPoint"],
-    "SteamBoilerUpdateSetPoint": data["SteamBoilerUpdateSetPoint"],
-
-}
+            return await self._rest_api_call(url=url, method=HTTPMethod.GET)
 
 
 

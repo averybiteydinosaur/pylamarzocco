@@ -24,6 +24,7 @@ from .const import (
 from .exceptions import ClientNotInitialized, UnknownWebSocketMessage
 from .helpers import (
     parse_boilers,
+    parse_pro_boilers,
     parse_cloud_statistics,
     parse_coffee_doses,
     parse_preinfusion_settings,
@@ -132,25 +133,45 @@ class LaMarzoccoMachine(LaMarzoccoDevice):
     def parse_config(self, raw_config: dict[str, Any]) -> None:
         """Parse the config object."""
 
-        super().parse_config(raw_config)
-        self._raw_config = raw_config
-        self.config.turned_on = raw_config["machineMode"] == "BrewingMode"
-        self.config.plumbed_in = raw_config["isPlumbedIn"]
-        self.config.water_contact = raw_config["tankStatus"]
-        self.config.backflush_enabled = raw_config["isBackFlushEnabled"]
-        self.config.doses, self.config.dose_hot_water = parse_coffee_doses(raw_config)
-        self.config.boilers = parse_boilers(raw_config["boilers"])
-        self.config.prebrew_mode, self.config.prebrew_configuration = (
-            parse_preinfusion_settings(raw_config)
-        )
-        self.config.smart_standby = parse_smart_standby(
-            raw_config.get("smartStandBy", {})
-        )
-        self.config.wake_up_sleep_entries = parse_wakeup_sleep_entries(
-            raw_config.get("wakeUpSleepEntries", {})
-        )
-        self.config.water_conductivity = raw_config["WaterConductivity"]["value"]
-        self.config.water_hardness = raw_config["WaterHardness"]["value"]
+        if self.account_type == "Professional":
+            super().parse_config(raw_config)
+            self._raw_config = raw_config
+            self.config.turned_on = raw_config["MachineConfiguration"]["value"]["machineMode"] == "BrewingMode"
+            self.config.plumbed_in = True
+            self.config.water_contact = True #TODO true?
+            self.config.backflush_enabled = False #TODO how does this factor in?
+            self.config.doses, self.config.dose_hot_water = parse_coffee_doses(raw_config["MachineConfiguration"]["value"])
+            self.config.boilers = parse_pro_boilers(raw_config)
+
+            self.config.prebrew_mode, self.config.prebrew_configuration = (
+                parse_preinfusion_settings(raw_config)
+            )
+            self.config.smart_standby = parse_smart_standby(
+                raw_config.get("smartStandBy", {})
+            )
+            self.config.wake_up_sleep_entries = parse_wakeup_sleep_entries(
+                raw_config.get("wakeUpSleepEntries", {})
+            )
+            self.config.water_conductivity = raw_config["WaterConductivity"]["value"]
+            self.config.water_hardness = raw_config["WaterHardness"]["value"]
+        else:
+            super().parse_config(raw_config)
+            self._raw_config = raw_config
+            self.config.turned_on = raw_config["machineMode"] == "BrewingMode"
+            self.config.plumbed_in = raw_config["isPlumbedIn"]
+            self.config.water_contact = raw_config["tankStatus"]
+            self.config.backflush_enabled = raw_config["isBackFlushEnabled"]
+            self.config.doses, self.config.dose_hot_water = parse_coffee_doses(raw_config)
+            self.config.boilers = parse_boilers(raw_config["boilers"])
+            self.config.prebrew_mode, self.config.prebrew_configuration = (
+                parse_preinfusion_settings(raw_config)
+            )
+            self.config.smart_standby = parse_smart_standby(
+                raw_config.get("smartStandBy", {})
+            )
+            self.config.wake_up_sleep_entries = parse_wakeup_sleep_entries(
+                raw_config.get("wakeUpSleepEntries", {})
+            )
 
     def parse_statistics(self, raw_statistics: list[dict[str, Any]]) -> None:
         """Parse the statistics object."""

@@ -28,6 +28,8 @@ async def main():
     #input(fleet)
     # serial = list(fleet.keys())[0]
 
+    print("got config")
+
     local_client = LaMarzoccoLocalClient(
         host=data["host"],
         local_bearer=data["token"],
@@ -51,6 +53,8 @@ async def main():
     #     # cloud_client=cloud_client,
     #     local_client=local_client,
     # )
+
+    input(config["MachineConfiguration"]["value"]["machineMode"])
 
     machine = await LaMarzoccoMachine.create(
         model=MachineModel(data["model"]),

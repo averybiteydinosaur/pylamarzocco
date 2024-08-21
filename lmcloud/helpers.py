@@ -79,6 +79,22 @@ def parse_boilers(boilers: list[dict[str, Any]]) -> dict[BoilerType, LaMarzoccoB
         )
     return parsed_boilers
 
+def parse_pro_boilers(raw_config: dict[str, Any]) -> dict[BoilerType, LaMarzoccoBoiler]:
+    """Parse boiler settings from API config object."""
+
+    parsed_boilers: dict[BoilerType, LaMarzoccoBoiler] = {}
+    parsed_boilers[BoilerType("CoffeeBoiler1")]= LaMarzoccoBoiler(
+            enabled=raw_config["CoffeeBoiler1Enabled"]["value"],
+            current_temperature=raw_config["CoffeeBoiler1UpdateTemperature"]["value"],
+            target_temperature=raw_config["MachineConfiguration"]["value"]["boilerTargetTemperature"]["CoffeeBoiler1"],
+        )
+    parsed_boilers[BoilerType("SteamBoiler")]= LaMarzoccoBoiler(
+            enabled=raw_config["SteamBoilerEnabled"]["value"],
+            current_temperature=raw_config["SteamBoilerUpdateTemperature"]["value"],
+            target_temperature=raw_config["MachineConfiguration"]["value"]["boilerTargetTemperature"]["SteamBoiler"],
+        )
+    return parsed_boilers
+
 
 def parse_preinfusion_settings(
     config: dict[str, Any]
